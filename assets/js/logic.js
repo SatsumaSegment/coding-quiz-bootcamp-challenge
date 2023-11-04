@@ -19,15 +19,25 @@ var wrongAns = -5;  // Seconds to deduct for wrong answer
 
 var questionCounter = 0;
 var QAList = [{
-    question: "",
+    question: "What does 'NaN' stand for in JavaScript? ",
     answers: {
-        a: "",
-        b: "",
-        c: "",
-        d: ""
-    }
-    correct: 
+        a: "a: Negative and Number",
+        b: "b: Not a Number",
+        c: "c: No Associated Number",
+        d: "d: Never a Number"
+    },
+    correct: "b"
 },
+{
+    question: "What does the modulus operator return? ",
+    answers: {
+        a: "a: The remainder of a division",
+        b: "b: Null",
+        c: "c: false",
+        d: "d: The sum of two numbers"
+    },
+    correct: "a"
+}
 ];
 
 // Timer countdown function
@@ -55,17 +65,80 @@ function startGame() {
 
 // Show quiz function
 function showQuiz() {
-    // Show the quiz screen
-    questions.classList.remove('hide');
-    question.innerText = questionArray[questionCounter];
-    var b1 = document.createElement('button');
-    var b2 = document.createElement('button');
-    var b3 = document.createElement('button');
-    var b4 = document.createElement('button');
-    b1.innerText = options[questionCounter][0];
-    b2.innerText = options[questionCounter][1];
+    // Obatain the current question using the questionCounter variable
+    var currentQuestion = QAList[questionCounter];
+
+    // Create button elements
+    var b1 = document.createElement("button");
+    var b2 = document.createElement("button");
+    var b3 = document.createElement("button");
+    var b4 = document.createElement("button");
+
+    // Add the answers to the button's text
+    b1.innerText = currentQuestion.answers.a
+    b2.innerText = currentQuestion.answers.b
+    b3.innerText = currentQuestion.answers.c
+    b4.innerText = currentQuestion.answers.d
+
+    // Display the button
     choices.appendChild(b1);
     choices.appendChild(b2);
+    choices.appendChild(b3);
+    choices.appendChild(b4);
+
+    // Listen for button click
+    b1.addEventListener('click', function() {
+        removeButtons(b1, b2, b3, b4);
+        handleAnswer("a");
+    })
+    b2.addEventListener('click', function() {
+        removeButtons(b1, b2, b3, b4);
+        handleAnswer("b");
+    })
+    b3.addEventListener('click', function() {
+        removeButtons(b1, b2, b3, b4);
+        handleAnswer("c");
+    })
+    b4.addEventListener('click', function() {
+        removeButtons(b1, b2, b3, b4);
+        handleAnswer("d");
+    })
+
+    // Show quiz question screen
+    questions.classList.remove('hide');
+
+    // Display the question in the question title box
+    question.textContent = currentQuestion.question;
+
+}
+
+// Function to remove buttons from last question
+function removeButtons(el1, el2, el3, el4) {
+    choices.removeChild(el1);
+    choices.removeChild(el2);
+    choices.removeChild(el3);
+    choices.removeChild(el4);
+    return;
+}
+
+// Check the user's answer
+function handleAnswer(ans) {
+    // If the answer is correct, add to score
+    // If incorrect, decrease timer
+    if (ans === QAList[questionCounter].correct) {
+        score++;
+    } else {
+        countdown += wrongAns;
+    }
+
+    // See how many questions are left
+    // End game or display next question
+    if (questionCounter >= QAList.length - 1) {
+        endGame();
+    } else {
+        questionCounter++;
+        showQuiz();
+    }
 }
 
 // Game end function
@@ -74,6 +147,8 @@ function endGame() {
     questions.classList.add('hide');
     // Show the end screen
     endScreen.classList.remove('hide');
+    // Show player's final score
+    finalScore.innerText = score;
 }
 
 // Submit score function
