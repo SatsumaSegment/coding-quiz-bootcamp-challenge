@@ -4,8 +4,9 @@ var start = document.getElementById('start');               // Start button
 var timer = document.getElementById('time');                // Timer display
 
 var questions = document.getElementById('questions');       // Questions screen
-var question = document.getElementById('question-title')    // Question display
-var choices = document.getElementById('choices')            // Choices section
+var question = document.getElementById('question-title');   // Question display
+var choices = document.getElementById('choices');           // Choices section
+var feedback = document.getElementById('feedback');         // Area to display feedback to user
 
 var endScreen = document.getElementById('end-screen');      // End screen
 var finalScore = document.getElementById('final-score');    // Final score display
@@ -13,32 +14,11 @@ var initials = document.getElementById('initials');         // Initials form fie
 var submitScore = document.getElementById('submit');        // Submit score button
 
 // Create game variables
-var countdown = 5;  // The game timer
+var countdown = 60;  // The game timer
 var score = 0;      // The players score
 var wrongAns = -5;  // Seconds to deduct for wrong answer
 
-var questionCounter = 0;
-var QAList = [{
-    question: "What does 'NaN' stand for in JavaScript? ",
-    answers: {
-        a: "a: Negative and Number",
-        b: "b: Not a Number",
-        c: "c: No Associated Number",
-        d: "d: Never a Number"
-    },
-    correct: "b"
-},
-{
-    question: "What does the modulus operator return? ",
-    answers: {
-        a: "a: The remainder of a division",
-        b: "b: Null",
-        c: "c: false",
-        d: "d: The sum of two numbers"
-    },
-    correct: "a"
-}
-];
+var questionCounter = 0; // Keep track of which question we're on
 
 // Timer countdown function
 function timerCount() {
