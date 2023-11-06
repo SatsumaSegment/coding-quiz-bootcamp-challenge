@@ -107,8 +107,10 @@ function handleAnswer(ans) {
     // If incorrect, decrease timer
     if (ans === QAList[questionCounter].correct) {
         score++;
+        giveFeedback(true);
     } else {
         countdown += wrongAns;
+        giveFeedback(false);
     }
 
     // See how many questions are left
@@ -119,6 +121,28 @@ function handleAnswer(ans) {
         questionCounter++;
         showQuiz();
     }
+}
+
+// Display feedback to the user for 1 second
+function giveFeedback(a) {
+    var time = 1;
+    // Show feedback area
+    feedback.classList.remove('hide');
+    var displayFeedback = setInterval(function() {
+        if (time <= 0) {
+            time = 1;
+            feedback.classList.add('hide');
+            clearInterval(displayFeedback);
+        } else {
+            if (a) {
+                feedback.innerText =  "Correct!";
+                time--;
+            } else {
+                feedback.innerText =  "Incorrect!";
+                time--;
+            }
+        }
+    }, 1000)
 }
 
 // Game end function
