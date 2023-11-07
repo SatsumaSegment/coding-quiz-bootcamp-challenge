@@ -13,12 +13,19 @@ var finalScore = document.getElementById('final-score');    // Final score displ
 var initials = document.getElementById('initials');         // Initials form field
 var submitScore = document.getElementById('submit');        // Submit score button
 
+
 // Create game variables
-var countdown = 60;  // The game timer
+var countdown = 40;  // The game timer
 var score = 0;      // The players score
 var wrongAns = -5;  // Seconds to deduct for wrong answer
+var stopTimer = false; // Timer stopper if user finishes all questions
+
 
 var questionCounter = 0; // Keep track of which question we're on
+
+// Sounds
+var correctSound = new Audio('./assets/sfx/correct.wav');
+var incorrectSound = new Audio('./assets/sfx/incorrect.wav');
 
 // Timer countdown function
 function timerCount() {
@@ -26,11 +33,12 @@ function timerCount() {
         countdown--;    // Deduct 1 second from countdown
         timer.innerText = countdown;
         // If the countdown reaches 0, call gameEnd() function
-        if (countdown <= 0) {
+        if (countdown <= 0 || stopTimer) {
+            timer.innerText = 0;
             clearInterval(c);
             endGame();
         }
-    }, 1000)
+    }, 1000);
 }
 
 // Game start function
@@ -107,15 +115,18 @@ function handleAnswer(ans) {
     // If incorrect, decrease timer
     if (ans === QAList[questionCounter].correct) {
         score++;
+        correctSound.play();
         giveFeedback(true);
     } else {
         countdown += wrongAns;
+        incorrectSound.play();
         giveFeedback(false);
     }
 
     // See how many questions are left
     // End game or display next question
     if (questionCounter >= QAList.length - 1) {
+        stopTimer = true;
         endGame();
     } else {
         questionCounter++;
