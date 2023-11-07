@@ -13,6 +13,17 @@ var finalScore = document.getElementById('final-score');    // Final score displ
 var initials = document.getElementById('initials');         // Initials form field
 var submitScore = document.getElementById('submit');        // Submit score button
 
+var highScores = document.getElementById('highscores');     // High scores list
+var clearScores = document.getElementById('clear');         // Clear high scores button
+if (localStorage.getItem('highscores') != null) {
+    var scoresArr = JSON.parse(localStorage.getItem('highscores'));
+    console.log(scoresArr);
+} else {
+    var scoresArr = [];
+    var str = JSON.stringify(scoresArr);
+    localStorage.setItem('highscores', str);
+    console.log("Made an array");
+}
 
 // Create game variables
 var countdown = 40;  // The game timer
@@ -168,8 +179,33 @@ function endGame() {
 
 // Submit score function
 function subScore() {
+    // Display the highscores page
+    location.href = './highscores.html';
+    // store player's score and initials in an array
+    var initScore = [initials.value, score];
+    // push the array to a scores array where we store all highscores
+    scoresArr.push(initScore);
+    // Sort the array so that highest scores come first
+    // Bubble sort
+    var swap;
+    for (var i = 0; i < scoresArr.length - 1; i++) {
+        for (var j = 0; j < scoresArr.length - 1; j++) {
+            if (scoresArr[i][1] < scoresArr[j + 1][1]) {
+                swap = scoresArr[j + 1];
+                scoresArr[j + 1] = scoresArr[i];
+                scoresArr[i] = swap;
+            }
+        }
+    }
+    console.log(scoresArr);
+    // stringify the array and add it to localstorage
+    var str = JSON.stringify(scoresArr); 
+    localStorage.setItem('highscores', str);
+
     return;
 }
 
 
 start.addEventListener('click', startGame);
+submitScore.addEventListener('click', subScore);
+
